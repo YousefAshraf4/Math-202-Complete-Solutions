@@ -1,2 +1,2 @@
 # Math-202-Complete-Solutions.github.io
- complete solution document covering all three sheets
+ Complete solution document covering all three sheets in Linear Alegbra
