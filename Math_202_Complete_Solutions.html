@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 202 — Complete Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #faf9f6;
+    --cream: #f3efe6;
+    --accent: #c0392b;
+    --accent2: #2980b9;
+    --accent3: #27ae60;
+    --gold: #b8860b;
+    --muted: #6b6b7b;
+    --border: #ddd9d0;
+    --highlight: #fff3cd;
+    --step-bg: #f0f4ff;
+    --answer-bg: #f0fff4;
+    --answer-border: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 21px);
+  }
+  header h1 {
+    font-family: 'EB Garamond', serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    position: relative;
+  }
+  header p {
+    color: #aaa;
+    font-size: .95rem;
+    margin-top: .4rem;
+    position: relative;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  nav a {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    padding: .45rem 1.1rem;
+    border-radius: 2rem;
+    color: var(--muted);
+    transition: all .2s;
+    border: 1.5px solid transparent;
+  }
+  nav a:hover, nav a.active {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* ── LAYOUT ── */
+  main { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+  .sheet-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--ink);
+    border-left: 5px solid var(--accent);
+    padding-left: 1rem;
+    margin: 3rem 0 2rem;
+  }
+  .sheet-title:first-child { margin-top: 0; }
+
+  /* ── PROBLEM CARD ── */
+  .problem {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .problem-header {
+    background: var(--ink);
+    color: #fff;
+    padding: .75rem 1.4rem;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: .3px;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .problem-header .num {
+    background: var(--accent);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem;
+    flex-shrink: 0;
+  }
+  .problem-body { padding: 1.5rem 1.6rem; }
+
+  /* ── PART ── */
+  .part {
+    background: var(--cream);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    margin: 1.2rem 0;
+    padding: 1rem 1.2rem;
+  }
+  .part-label {
+    font-weight: 700;
+    color: var(--accent2);
+    font-size: .88rem;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: .6rem;
+  }
+
+  /* ── STEPS ── */
+  .steps { counter-reset: step; list-style: none; margin: .8rem 0; }
+  .steps li {
+    position: relative;
+    padding-left: 2.2rem;
+    margin-bottom: .7rem;
+    font-size: .97rem;
+    line-height: 1.75;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute; left: 0; top: .1rem;
+    background: var(--accent);
+    color: #fff;
+    width: 1.5rem; height: 1.5rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── MATH DISPLAY ── */
+  .math {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--step-bg);
+    border: 1px solid #c9d8f5;
+    border-radius: 6px;
+    padding: .5rem 1rem;
+    margin: .6rem 0;
+    font-size: .9rem;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+    display: block;
+  }
+  .answer {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--answer-bg);
+    border: 2px solid var(--answer-border);
+    border-radius: 6px;
+    padding: .5rem 1rem;
+    margin: .8rem 0;
+    font-size: .92rem;
+    font-weight: 600;
+    overflow-x: auto;
+    display: block;
+  }
+  .note {
+    background: var(--highlight);
+    border-left: 3px solid var(--gold);
+    padding: .5rem .9rem;
+    border-radius: 0 5px 5px 0;
+    font-size: .88rem;
+    margin: .7rem 0;
+    color: #6b4c00;
+  }
+  .warn {
+    background: #fff5f5;
+    border-left: 3px solid var(--accent);
+    padding: .5rem .9rem;
+    border-radius: 0 5px 5px 0;
+    font-size: .88rem;
+    margin: .7rem 0;
+    color: #7a1010;
+  }
+  .matrix {
+    font-family: 'JetBrains Mono', monospace;
+    display: inline-block;
+    border-left: 2px solid var(--ink);
+    border-right: 2px solid var(--ink);
+    padding: .3rem .8rem;
+    margin: .2rem;
+    line-height: 1.7;
+    font-size: .88rem;
+  }
+  .inline-math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .88rem;
+    background: #eef2ff;
+    padding: .1rem .35rem;
+    border-radius: 3px;
+  }
+  p { margin-bottom: .5rem; }
+  strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Math 202 — Complete Solutions</h1>
+  <p>Sheets 1 · 2 · 3 &nbsp;|&nbsp; Linear Algebra</p>
+</header>
+
+<nav>
+  <a href="#sheet1" class="active">Sheet 1 · Matrices & Operations</a>
+  <a href="#sheet2">Sheet 2 · Equations & Determinants</a>
+  <a href="#sheet3">Sheet 3 · Inverses & Orthogonality</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════ SHEET 1 ═══════════════════ -->
+<h2 class="sheet-title" id="sheet1">Sheet 1 — Matrix Formation & Operations</h2>
+
+<!-- Q1 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">1</span> Form A = (aᵢⱼ) of order 3×2 where aᵢⱼ = i − j + 2, then C = Aᵗ</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Indices: i ∈ {1,2,3}, j ∈ {1,2}. Fill each entry using aᵢⱼ = i − j + 2:
+        <span class="math">a₁₁=1−1+2=2  a₁₂=1−2+2=1
+a₂₁=2−1+2=3  a₂₂=2−2+2=2
+a₃₁=3−1+2=4  a₃₂=3−2+2=3</span>
+      </li>
+      <li>Write matrix A (3×2) and its transpose C (2×3):
+        <span class="math">      ⎡2  1⎤                        ⎡2  3  4⎤
+A =  ⎢3  2⎥   →   C = Aᵗ =  ⎣1  2  3⎦
+      ⎣4  3⎦</span>
+      </li>
+    </ul>
+    <span class="answer">A is 3×2 ; C = Aᵗ is 2×3</span>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">2</span> A = (aₓᵧ) for x,y ∈ {1,2,3} with aₓᵧ = y − x</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Fill the 3×3 grid (row = x, col = y):
+        <span class="math">a₁₁=0  a₁₂=1  a₁₃=2
+a₂₁=−1 a₂₂=0  a₂₃=1
+a₃₁=−2 a₃₂=−1 a₃₃=0</span>
+      </li>
+      <li>Write A and its transpose:
+        <span class="math">      ⎡ 0   1   2⎤           ⎡ 0  −1  −2⎤
+A =  ⎢−1   0   1⎥   Aᵗ = ⎢ 1   0  −1⎥
+      ⎣−2  −1   0⎦           ⎣ 2   1   0⎦</span>
+      </li>
+    </ul>
+    <div class="note">Notice: aₓᵧ = y−x = −(x−y) = −aᵧₓ, so A is a <strong>skew-symmetric</strong> matrix (Aᵗ = −A).</div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">3</span> Matrix computations (A,B,C,D,E,F as given)</div>
+  <div class="problem-body">
+    <div class="note">Given sizes: A(2×3), B(3×2), C(3×3), D(2×2), E(3×3), F(2×2)</div>
+
+    <div class="part">
+      <div class="part-label">a) C + E</div>
+      Both are 3×3 — add entry-by-entry:
+      <span class="math">C + E = ⎡3+2  −1+(−4)  3+5⎤ = ⎡5  −5   8⎤
+        ⎢4+0   1+1    5+4⎥   ⎢4   2   9⎥
+        ⎣2+3   1+2    3+1⎦   ⎣5   3   4⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">b) AB, BA, FD, DF — and what we deduce</div>
+      <ul class="steps">
+        <li>AB: A(2×3)×B(3×2) → 2×2
+          <span class="math">AB = ⎡1·1+2·2+3·3  1·0+2·1+3·2⎤ = ⎡14  8⎤
+     ⎣2·1+1·2+4·3  2·0+1·1+4·2⎦   ⎣16  9⎦</span>
+        </li>
+        <li>BA: B(3×2)×A(2×3) → 3×3
+          <span class="math">BA = ⎡1   2   3⎤
+     ⎢4   5  10⎥
+     ⎣7   8  17⎦</span>
+        </li>
+        <li>FD: F(2×2)×D(2×2) → 2×2
+          <span class="math">FD = ⎡−4·3+5·2   −4·(−2)+5·4⎤ = ⎡−2  28⎤
+     ⎣ 2·3+3·2    2·(−2)+3·4⎦   ⎣12   8⎦</span>
+        </li>
+        <li>DF: D(2×2)×F(2×2) → 2×2
+          <span class="math">DF = ⎡3·(−4)+(−2)·2  3·5+(−2)·3⎤ = ⎡−16   9⎤
+     ⎣2·(−4)+ 4·2   2·5+ 4·3⎦   ⎣  0  22⎦</span>
+        </li>
+      </ul>
+      <div class="note">Deduction: AB ≠ BA and FD ≠ DF — matrix multiplication is in general <strong>not commutative</strong>.</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">c) 2D − 3F</div>
+      <span class="math">2D = ⎡6  −4⎤   3F = ⎡−12  15⎤
+     ⎣4   8⎦         ⎣  6   9⎦
+
+2D − 3F = ⎡18  −19⎤
+           ⎣−2   −1⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">d) CB + D</div>
+      <ul class="steps">
+        <li>CB: C(3×3)×B(3×2) → 3×2</li>
+        <li>D is 2×2. Since 3×2 ≠ 2×2, we <strong>cannot add</strong> CB + D.</li>
+      </ul>
+      <div class="warn">Not defined — dimension mismatch (3×2 + 2×2 is impossible).</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">e) EF + 2A</div>
+      E is 3×3 and F is 2×2 → EF requires 3 = 2 (columns of E = rows of F) — impossible.
+      <div class="warn">Not defined — EF cannot be computed (3×3 × 2×2).</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">f) A(BD) and (AB)D — verify associativity</div>
+      <ul class="steps">
+        <li>BD: B(3×2)×D(2×2) → 3×2
+          <span class="math">BD = ⎡1·3+0·2   1·(−2)+0·4⎤ = ⎡ 3  −2⎤
+     ⎢2·3+1·2   2·(−2)+1·4⎥   ⎢ 8   0⎥
+     ⎣3·3+2·2   3·(−2)+2·4⎦   ⎣13   2⎦</span>
+        </li>
+        <li>A(BD): A(2×3)×BD(3×2) → 2×2
+          <span class="math">A(BD) = ⎡1·3+2·8+3·13  1·(−2)+2·0+3·2⎤ = ⎡58  4⎤
+          ⎣2·3+1·8+4·13  2·(−2)+1·0+4·2⎦   ⎣66  4⎦</span>
+        </li>
+        <li>(AB)D: AB(2×2)×D(2×2) → 2×2
+          <span class="math">(AB)D = ⎡14·3+8·2  14·(−2)+8·4⎤ = ⎡58  4⎤
+           ⎣16·3+9·2  16·(−2)+9·4⎦   ⎣66  4⎦</span>
+        </li>
+      </ul>
+      <div class="note">A(BD) = (AB)D — confirms matrix multiplication is <strong>associative</strong>.</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">g) A(C+E) and AC + AE — verify distributivity</div>
+      <ul class="steps">
+        <li>C + E (from part a) = [[5,−5,8],[4,2,9],[5,3,4]]</li>
+        <li>A(C+E):
+          <span class="math">A(C+E) = ⎡1·5+2·4+3·5  1·(−5)+2·2+3·3  1·8+2·9+3·4⎤ = ⎡28   8  38⎤
+           ⎣2·5+1·4+4·5  2·(−5)+1·2+4·3  2·8+1·9+4·4⎦   ⎣34   4  41⎦</span>
+        </li>
+        <li>AC:
+          <span class="math">AC = ⎡17   4  22⎤
+     ⎣18   3  23⎦</span>
+        </li>
+        <li>AE:
+          <span class="math">AE = ⎡11   4  16⎤
+     ⎣16   1  18⎦</span>
+        </li>
+        <li>AC + AE = [[28,8,38],[34,4,41]] ✓</li>
+      </ul>
+      <div class="note">A(C+E) = AC + AE — confirms <strong>distributive law</strong>.</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">h) Aᵗ and (Aᵗ)ᵗ</div>
+      <span class="math">A = ⎡1  2  3⎤     Aᵗ = ⎡1  2⎤     (Aᵗ)ᵗ = A = ⎡1  2  3⎤
+    ⎣2  1  4⎦           ⎢2  1⎥                  ⎣2  1  4⎦
+                         ⎣3  4⎦</span>
+      <div class="note">Double transposing returns the original matrix: <strong>(Aᵗ)ᵗ = A</strong>.</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">i) (2C + E)ᵗ and 2Cᵗ + Eᵗ</div>
+      <ul class="steps">
+        <li>2C + E = [[8,−6,11],[8,3,14],[7,4,7]]</li>
+        <li>(2C+E)ᵗ = [[8,8,7],[−6,3,4],[11,14,7]]</li>
+        <li>2Cᵗ + Eᵗ = [[8,8,7],[−6,3,4],[11,14,7]] ✓</li>
+      </ul>
+      <div class="note">Confirms: <strong>(αC + E)ᵗ = αCᵗ + Eᵗ</strong> (transpose is linear).</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">j) (AB)ᵗ and BᵗAᵗ — verify transpose of product</div>
+      <ul class="steps">
+        <li>(AB)ᵗ = [[14,16],[8,9]]</li>
+        <li>Bᵗ(2×3) × Aᵗ(3×2): BᵗAᵗ = [[14,16],[8,9]] ✓</li>
+      </ul>
+      <div class="note">Confirms the rule: <strong>(AB)ᵗ = BᵗAᵗ</strong>.</div>
+    </div>
+
+    <div class="part">
+      <div class="part-label">k) (2BC − D)ᵗ</div>
+      B is 3×2, C is 3×3 → BC requires columns of B (2) = rows of C (3): impossible.
+      <div class="warn">Not defined — BC cannot be computed (dimensions 3×2 and 3×3 are incompatible for multiplication in this order).</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════ SHEET 2 ═══════════════════ -->
+<h2 class="sheet-title" id="sheet2">Sheet 2 — Matrix Equations & Determinants</h2>
+
+<!-- Q1 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">1</span> Find X such that 2Xᵗ = A² + (BC)ᵗ</div>
+  <div class="problem-body">
+    Given: A=[[13,7],[−1,8]], B=[[−3,4,5],[9,0,7]], C=[[1,0],[−1,4],[2,5]]
+    <ul class="steps">
+      <li>Compute A²:
+        <span class="math">A² = ⎡13·13+7·(−1)   13·7+7·8 ⎤ = ⎡162  147⎤
+     ⎣(−1)·13+8·(−1) (−1)·7+8·8⎦   ⎣−21   57⎦</span>
+      </li>
+      <li>Compute BC (2×3 × 3×2 → 2×2):
+        <span class="math">BC = ⎡−3+4·(−1)+5·2   0+16+25⎤ = ⎡3   41⎤
+     ⎣ 9+0+7·2         0+0+35 ⎦   ⎣23  35⎦</span>
+      </li>
+      <li>Transpose BC:
+        <span class="math">(BC)ᵗ = ⎡3   23⎤
+        ⎣41  35⎦</span>
+      </li>
+      <li>Sum:
+        <span class="math">A² + (BC)ᵗ = ⎡165  170⎤
+             ⎣ 20   92⎦</span>
+      </li>
+      <li>Solve for Xᵗ then X:
+        <span class="math">2Xᵗ = ⎡165  170⎤  →  Xᵗ = ⎡165/2  85⎤  →  X = ⎡165/2  10⎤
+      ⎣ 20   92⎦           ⎣  10  46⎦           ⎣ 85   46⎦</span>
+      </li>
+    </ul>
+    <span class="answer">X = ⎡82.5   10⎤
+    ⎣85     46⎦</span>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">2</span> Solve the matrix equation: 4[X + [[5,−1],[0,−3]]] = 2X + [[12,−4],[5,−6]]</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Expand the left side:
+        <span class="math">4X + ⎡20  −4⎤ = 2X + ⎡12  −4⎤
+     ⎣ 0 −12⎦         ⎣ 5  −6⎦</span>
+      </li>
+      <li>Isolate X:
+        <span class="math">4X − 2X = ⎡12  −4⎤ − ⎡20  −4⎤ = ⎡−8    0⎤
+           ⎣ 5  −6⎦   ⎣ 0 −12⎦   ⎣ 5    6⎦</span>
+      </li>
+      <li>Divide by 2:
+        <span class="math">2X = ⎡−8   0⎤  →  X = ⎡−4    0 ⎤
+     ⎣ 5   6⎦           ⎣5/2  3 ⎦</span>
+      </li>
+    </ul>
+    <span class="answer">X = ⎡−4    0⎤
+    ⎣5/2   3⎦</span>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">3</span> Given A and B, find X such that AB − |A|X + tr(B)A − diag(2,3) = 4I</div>
+  <div class="problem-body">
+    Given: A=[[1,−1],[2,4]], B=[[3,5],[−2,−12]]
+    <ul class="steps">
+      <li>Compute |A| and tr(B):
+        <span class="math">|A| = 1·4 − (−1)·2 = 4 + 2 = 6
+tr(B) = 3 + (−12) = −9</span>
+      </li>
+      <li>Compute AB:
+        <span class="math">AB = ⎡1·3+(−1)(−2)  1·5+(−1)(−12)⎤ = ⎡ 5   17⎤
+     ⎣2·3+4·(−2)   2·5+4·(−12) ⎦   ⎣−2  −38⎦</span>
+      </li>
+      <li>Compute tr(B)·A = −9·A:
+        <span class="math">−9A = ⎡−9   9⎤
+      ⎣−18 −36⎦</span>
+      </li>
+      <li>Assemble right-hand side (move 6X to the other side):
+        <span class="math">6X = AB + tr(B)A − diag(2,3) − 4I
+   = ⎡5    17⎤ + ⎡−9    9⎤ − ⎡2  0⎤ − ⎡4  0⎤
+     ⎣−2  −38⎦   ⎣−18 −36⎦   ⎣0  3⎦   ⎣0  4⎦
+
+   = ⎡5−9−2−4    17+9−0−0⎤ = ⎡−10   26⎤
+     ⎣−2−18−0−0  −38−36−3−4⎦   ⎣−20  −81⎦</span>
+      </li>
+      <li>Divide by 6:
+        <span class="math">X = ⎡−5/3   13/3 ⎤
+    ⎣−10/3  −27/2⎦</span>
+
+Wait — let me recheck row 2, col 2:  −38 − 36 − 3 − 4 = −81.  −81/6 = −27/2. ✓
+      </li>
+    </ul>
+    <span class="answer">X = ⎡−5/3    13/3 ⎤
+    ⎣−10/3  −27/2⎦</span>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">4</span> Find k such that AB = BA</div>
+  <div class="problem-body">
+    Given: A=[[2,3],[−1,1]], B=[[1,9],[−3,k]]
+    <ul class="steps">
+      <li>Compute AB:
+        <span class="math">AB = ⎡2·1+3·(−3)   2·9+3k ⎤ = ⎡−7    18+3k⎤
+     ⎣(−1)·1+1·(−3)  (−1)·9+1·k⎦   ⎣−4    −9+k ⎦</span>
+      </li>
+      <li>Compute BA:
+        <span class="math">BA = ⎡1·2+9·(−1)   1·3+9·1 ⎤ = ⎡ −7   12    ⎤
+     ⎣(−3)·2+k·(−1)  (−3)·3+k·1⎦   ⎣−6−k  −9+k⎦</span>
+      </li>
+      <li>Set AB = BA, compare entries:
+        <span class="math">Entry (1,2): 18 + 3k = 12  →  3k = −6  →  k = −2
+Entry (2,1): −4 = −6 − k  →  k = −2  ✓
+Entry (2,2): −9 + k = −9 + k  ✓ (always true)</span>
+      </li>
+    </ul>
+    <span class="answer">k = −2</span>
+  </div>
+</div>
+
+<!-- Q5a -->
+<div class="problem">
+  <div class="problem-header"><span class="num">5a</span> Equality of matrices — find x, y, z, w</div>
+  <div class="problem-body">
+    D = [[8,15],[−1, z+y]] = [[w³, x²−1],[y, 8]]
+    <ul class="steps">
+      <li>Entry (1,1): 8 = w³ → <strong>w = 2</strong></li>
+      <li>Entry (1,2): 15 = x²−1 → x² = 16 → <strong>x = ±4</strong></li>
+      <li>Entry (2,1): −1 = y → <strong>y = −1</strong></li>
+      <li>Entry (2,2): z + y = 8 → z + (−1) = 8 → <strong>z = 9</strong></li>
+    </ul>
+    <span class="answer">w = 2, x = ±4, y = −1, z = 9</span>
+  </div>
+</div>
+
+<!-- Q5b -->
+<div class="problem">
+  <div class="problem-header"><span class="num">5b</span> Find x − y from matrix equality</div>
+  <div class="problem-body">
+    [[x³−y³, 6],[x²+xy+y², 12]] = 3·[[3,2],[1,4]] = [[9,6],[3,12]]
+    <ul class="steps">
+      <li>From entry (2,1): x² + xy + y² = 3</li>
+      <li>From entry (1,1): x³ − y³ = 9</li>
+      <li>Factor: x³ − y³ = (x − y)(x² + xy + y²) → 9 = (x − y)·3</li>
+      <li>Therefore: x − y = 3</li>
+    </ul>
+    <span class="answer">x − y = 3</span>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">6</span> Find x, y, z for symmetric matrix A</div>
+  <div class="problem-body">
+    A = [[5, 2y, 3y+x],[z+1, −1, z+3],[2+3x, 8, 0]]
+    <div class="note">A symmetric means Aᵗ = A, i.e., aᵢⱼ = aⱼᵢ for all i,j.</div>
+    <ul class="steps">
+      <li>a₂₃ = a₃₂: z + 3 = 8 → <strong>z = 5</strong></li>
+      <li>a₁₂ = a₂₁: 2y = z + 1 = 6 → <strong>y = 3</strong></li>
+      <li>a₁₃ = a₃₁: 3y + x = 2 + 3x → 9 + x = 2 + 3x → 7 = 2x → <strong>x = 7/2</strong></li>
+    </ul>
+    <span class="answer">x = 7/2, y = 3, z = 5</span>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">7</span> Find a, b, c, d, e, f for skew-symmetric matrix B</div>
+  <div class="problem-body">
+    B = [[a, a+d, b−e],[1, b, −2],[2, f, c]]
+    <div class="note">B skew-symmetric means Bᵗ = −B, so bᵢⱼ = −bⱼᵢ and all diagonal entries = 0.</div>
+    <ul class="steps">
+      <li>Diagonal: a = 0, b = 0, c = 0</li>
+      <li>b₁₂ = −b₂₁: a + d = −1 → 0 + d = −1 → <strong>d = −1</strong></li>
+      <li>b₁₃ = −b₃₁: b − e = −2 → 0 − e = −2 → <strong>e = 2</strong></li>
+      <li>b₂₃ = −b₃₂: −2 = −f → <strong>f = 2</strong></li>
+    </ul>
+    <span class="answer">a=0, b=0, c=0, d=−1, e=2, f=2</span>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">8</span> Trace properties — tr(A) = 4, tr(B) = −3</div>
+  <div class="problem-body">
+    <div class="note">Key properties: tr(A+B)=tr(A)+tr(B), tr(αA)=α·tr(A), tr(Aᵗ)=tr(A)</div>
+    <div class="part">
+      <div class="part-label">a) tr(A+B)</div>
+      tr(A+B) = tr(A) + tr(B) = 4 + (−3) = <strong>1</strong>
+    </div>
+    <div class="part">
+      <div class="part-label">b) tr(2Aᵗ − B)</div>
+      = 2·tr(Aᵗ) − tr(B) = 2·4 − (−3) = 8 + 3 = <strong>11</strong>
+    </div>
+    <div class="part">
+      <div class="part-label">c) tr((4A + B)ᵗ)</div>
+      tr((4A+B)ᵗ) = tr(4A+B) = 4·tr(A) + tr(B) = 16 − 3 = <strong>13</strong>
+    </div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">9</span> Compute determinants</div>
+  <div class="problem-body">
+    <div class="part">
+      <div class="part-label">a) |[[1,0,−3],[−2,2,3],[7,5,2]]|</div>
+      Expand along the first row:
+      <span class="math">= 1·|⎡2  3⎤| − 0 + (−3)·|⎡−2  2⎤|
+       |⎣5  2⎦|              |⎣ 7  5⎦|
+= 1·(4−15) − 0 + (−3)·(−10−14)
+= −11 + (−3)(−24) = −11 + 72 = 61</span>
+      <span class="answer">Determinant = 61</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">b) |[[1,0,−3],[−2,0,3],[7,0,2]]|</div>
+      The entire second column is zero → determinant = 0 (column of zeros).
+      <span class="answer">Determinant = 0</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">c) |[[1,−1,4,15],[0,2,−100,12],[0,0,−1,0],[0,0,0,4]]|</div>
+      Upper triangular matrix → determinant = product of diagonal entries.
+      <span class="math">det = 1 × 2 × (−1) × 4 = −8</span>
+      <span class="answer">Determinant = −8</span>
+    </div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">10</span> Find x such that A is singular (|A| = 0)</div>
+  <div class="problem-body">
+    A = [[x,2,4],[1,1,x],[3,7,9]]
+    <ul class="steps">
+      <li>Expand along first row:
+        <span class="math">|A| = x·(9−7x) − 2·(9−3x) + 4·(7−3)
+    = 9x − 7x² − 18 + 6x + 16
+    = −7x² + 15x − 2</span>
+      </li>
+      <li>Set |A| = 0:
+        <span class="math">7x² − 15x + 2 = 0</span>
+      </li>
+      <li>Quadratic formula:
+        <span class="math">x = (15 ± √(225 − 56)) / 14 = (15 ± √169) / 14 = (15 ± 13) / 14</span>
+      </li>
+      <li>Two solutions:
+        <span class="math">x = 28/14 = 2   OR   x = 2/14 = 1/7</span>
+      </li>
+    </ul>
+    <span class="answer">x = 2  or  x = 1/7</span>
+  </div>
+</div>
+
+<!-- Q11 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">11</span> Determinant properties — |A|=−3 (order 3), |B|=4 (order 3)</div>
+  <div class="problem-body">
+    <div class="note">Key rules: |AB|=|A||B|; |Aᵗ|=|A|; |kA|=kⁿ|A| for n×n matrix; |A⁻¹|=1/|A|.</div>
+    <div class="part">
+      <div class="part-label">a) |AB|</div>
+      |AB| = |A|·|B| = (−3)(4) = <strong>−12</strong>
+    </div>
+    <div class="part">
+      <div class="part-label">b) |ABᵗ|</div>
+      |ABᵗ| = |A|·|Bᵗ| = |A|·|B| = (−3)(4) = <strong>−12</strong>
+    </div>
+    <div class="part">
+      <div class="part-label">c) |(AB)ᵗ|</div>
+      |(AB)ᵗ| = |AB| = <strong>−12</strong>
+    </div>
+    <div class="part">
+      <div class="part-label">d) |−3Bᵗ|</div>
+      <span class="math">|−3Bᵗ| = (−3)³ · |Bᵗ| = −27 · |B| = −27 · 4 = −108</span>
+      <strong>−108</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SHEET 3 ═══════════════════ -->
+<h2 class="sheet-title" id="sheet3">Sheet 3 — Inverses, Determinant Properties & Orthogonal Matrices</h2>
+
+<!-- Q1 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">1</span> Find the inverses of the following matrices</div>
+  <div class="problem-body">
+    <div class="note">Method: A⁻¹ = (1/|A|) · adj(A). A is invertible iff |A| ≠ 0.</div>
+
+    <div class="part">
+      <div class="part-label">a) A = [[12,7],[2,1]]</div>
+      <ul class="steps">
+        <li>|A| = 12·1 − 7·2 = 12 − 14 = <strong>−2 ≠ 0</strong> → invertible</li>
+        <li>adj of 2×2: swap diagonal, negate off-diagonal:
+          <span class="math">adj(A) = ⎡ 1  −7⎤
+         ⎣−2  12⎦</span>
+        </li>
+        <li>A⁻¹ = (1/−2)·adj(A):
+          <span class="math">A⁻¹ = ⎡−1/2   7/2⎤
+      ⎣  1    −6 ⎦</span>
+        </li>
+      </ul>
+      <span class="answer">A⁻¹ = ⎡−1/2   7/2⎤
+       ⎣  1    −6 ⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">b) A = [[1,2,−1],[−2,0,1],[1,−1,0]]</div>
+      <ul class="steps">
+        <li>Compute |A| (expand row 1):
+          <span class="math">|A| = 1·(0·0−1·(−1)) − 2·(−2·0−1·1) + (−1)·(−2·(−1)−0·1)
+    = 1·(1) − 2·(−1) + (−1)·(2)
+    = 1 + 2 − 2 = 1</span>
+        </li>
+        <li>Compute all 9 cofactors Cᵢⱼ = (−1)^(i+j)·Mᵢⱼ:
+          <span class="math">C₁₁=+|⎡0  1⎤|=0+1=1   C₁₂=−|⎡−2  1⎤|=−(0−1)=1   C₁₃=+|⎡−2  0⎤|=2
+       ⎣−1 0⎦           ⎣ 1  0⎦               ⎣ 1 −1⎦
+C₂₁=−|⎡ 2 −1⎤|=−(0−1)=1  C₂₂=+|⎡1 −1⎤|=0+1=1  C₂₃=−|⎡1  2⎤|=−(−1−2)=3
+       ⎣−1  0⎦              ⎣1  0⎦              ⎣1 −1⎦
+C₃₁=+|⎡ 2 −1⎤|=2−0=2  C₃₂=−|⎡1 −1⎤|=−(1−2)=1  C₃₃=+|⎡1  2⎤|=0+4=4
+       ⎣ 0  1⎦              ⎣−2  1⎦               ⎣−2 0⎦</span>
+        </li>
+        <li>adj(A) = (cofactor matrix)ᵗ:
+          <span class="math">adj(A) = ⎡1  1  2⎤
+         ⎢1  1  1⎥
+         ⎣2  3  4⎦</span>
+        </li>
+        <li>A⁻¹ = (1/1)·adj(A) = adj(A)</li>
+      </ul>
+      <span class="answer">A⁻¹ = ⎡1  1  2⎤
+       ⎢1  1  1⎥
+       ⎣2  3  4⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">c) A = [[1,3,5],[2,1,1],[3,4,2]]</div>
+      <ul class="steps">
+        <li>Compute |A| (expand row 1):
+          <span class="math">|A| = 1·(2−4) − 3·(4−3) + 5·(8−3)
+    = 1·(−2) − 3·(1) + 5·(5)
+    = −2 − 3 + 25 = 20</span>
+        </li>
+        <li>Cofactors:
+          <span class="math">C₁₁ = |⎡1 1⎤| = 2−4 = −2    C₁₂ = −|⎡2 1⎤| = −(4−3) = −1    C₁₃ = |⎡2 1⎤| = 8−3 = 5
+         ⎣4 2⎦                  ⎣3 2⎦                       ⎣3 4⎦
+C₂₁ = −|⎡3 5⎤| = −(6−20)=14   C₂₂ = |⎡1 5⎤| = 2−15=−13   C₂₃ = −|⎡1 3⎤| = −(4−9)=5
+         ⎣4 2⎦                   ⎣3 2⎦                        ⎣3 4⎦
+C₃₁ = |⎡3 5⎤| = 3−5 = −2     C₃₂ = −|⎡1 5⎤| = −(1−10)=9   C₃₃ = |⎡1 3⎤| = 1−6=−5
+        ⎣1 1⎦                    ⎣2 1⎦                         ⎣2 1⎦</span>
+        </li>
+        <li>adj(A) = Cᵗ:
+          <span class="math">adj(A) = ⎡−2   14  −2⎤
+         ⎢−1  −13   9⎥
+         ⎣ 5    5  −5⎦</span>
+        </li>
+      </ul>
+      <span class="answer">A⁻¹ = (1/20)·⎡−2   14  −2⎤
+              ⎢−1  −13   9⎥
+              ⎣ 5    5  −5⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">d) A = diag(1, 2, 3, 4)</div>
+      <ul class="steps">
+        <li>Diagonal matrix: |A| = 1·2·3·4 = 24 ≠ 0</li>
+        <li>Inverse of a diagonal matrix: take reciprocal of each diagonal entry.</li>
+      </ul>
+      <span class="answer">A⁻¹ = diag(1, 1/2, 1/3, 1/4)</span>
+    </div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">2</span> A=[[1,1],[3,4]], B=[[3,2],[−2,−1]] — find X, Y, Z</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Compute |A| = 4−3 = 1, so A⁻¹ = [[4,−1],[−3,1]]</li>
+      <li>Compute |B| = (3)(−1)−(2)(−2) = −3+4 = 1, so B⁻¹ = [[−1,−2],[2,3]]</li>
+    </ul>
+
+    <div class="part">
+      <div class="part-label">a) AX = B → X = A⁻¹B</div>
+      <span class="math">X = ⎡4  −1⎤·⎡ 3   2⎤ = ⎡4·3+(−1)(−2)  4·2+(−1)(−1)⎤ = ⎡14   9⎤
+    ⎣−3   1⎦ ⎣−2  −1⎦   ⎣−3·3+1·(−2)  −3·2+1·(−1)⎦   ⎣−11 −7⎦</span>
+      <span class="answer">X = ⎡14    9⎤
+    ⎣−11  −7⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">b) YB = |B|A = 1·A = A → Y = AB⁻¹</div>
+      <span class="math">Y = ⎡1  1⎤·⎡−1  −2⎤ = ⎡−1+2  −2+3⎤ = ⎡1  1⎤
+    ⎣3  4⎦ ⎣ 2   3⎦   ⎣−3+8  −6+12⎦   ⎣5  6⎦</span>
+      <span class="answer">Y = ⎡1  1⎤
+    ⎣5  6⎦</span>
+    </div>
+
+    <div class="part">
+      <div class="part-label">c) AZB + I = 2Bᵗ → Z = A⁻¹(2Bᵗ − I)B⁻¹</div>
+      <ul class="steps">
+        <li>Bᵗ = [[3,−2],[2,−1]]; 2Bᵗ − I = [[6,−4],[4,−2]] − [[1,0],[0,1]] = [[5,−4],[4,−3]]</li>
+        <li>Let M = 2Bᵗ − I. Compute A⁻¹·M:
+          <span class="math">A⁻¹M = ⎡4  −1⎤·⎡5  −4⎤ = ⎡20−4  −16+3⎤ = ⎡16  −13⎤
+        ⎣−3   1⎦ ⎣4  −3⎦   ⎣−15+4  12−3⎦   ⎣−11   9⎦</span>
+        </li>
+        <li>Compute (A⁻¹M)·B⁻¹:
+          <span class="math">Z = ⎡16  −13⎤·⎡−1  −2⎤ = ⎡−16−26  −32−39⎤ = ⎡−42  −71⎤
+    ⎣−11   9⎦ ⎣ 2   3⎦   ⎣ 11+18   22+27⎦   ⎣ 29   49⎦</span>
+        </li>
+      </ul>
+      <span class="answer">Z = ⎡−42  −71⎤
+    ⎣ 29   49⎦</span>
+    </div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">3</span> Find X such that AX + tr(B)A − diag(2,3) = |A|I</div>
+  <div class="problem-body">
+    Given: A=[[1,−1],[−2,4]], B=[[3,5],[−2,−12]]
+    <ul class="steps">
+      <li>Compute |A| = (1)(4)−(−1)(−2) = 4−2 = <strong>2</strong></li>
+      <li>tr(B) = 3+(−12) = <strong>−9</strong></li>
+      <li>Rearrange: AX = |A|I − tr(B)A + diag(2,3)
+        <span class="math">= 2·⎡1  0⎤ − (−9)·⎡1  −1⎤ + ⎡2  0⎤
+      ⎣0  1⎦           ⎣−2   4⎦   ⎣0  3⎦
+
+= ⎡2  0⎤ + ⎡9  −9⎤ + ⎡2  0⎤ = ⎡13   −9⎤
+  ⎣0  2⎦   ⎣−18 36⎦   ⎣0  3⎦   ⎣−18  41⎦</span>
+      </li>
+      <li>Compute A⁻¹: |A|=2, adj(A) = [[4,1],[2,1]]
+        <span class="math">A⁻¹ = (1/2)·⎡4  1⎤ = ⎡2    1/2⎤
+             ⎣2  1⎦   ⎣1    1/2⎦</span>
+      </li>
+      <li>X = A⁻¹·[[13,−9],[−18,41]]:
+        <span class="math">X = ⎡2·13+(1/2)(−18)   2·(−9)+(1/2)(41)⎤ = ⎡26−9   −18+20.5⎤ = ⎡17    5/2⎤
+    ⎣1·13+(1/2)(−18)  1·(−9)+(1/2)(41)⎦   ⎣13−9   −9+20.5⎦   ⎣4    23/2⎦</span>
+      </li>
+    </ul>
+    <span class="answer">X = ⎡17    5/2 ⎤
+    ⎣4    23/2⎦</span>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">4</span> If A² + 2A − I = 0, find A⁻¹</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Rearrange the equation:
+        <span class="math">A² + 2A = I</span>
+      </li>
+      <li>Factor out A on the left:
+        <span class="math">A(A + 2I) = I</span>
+      </li>
+      <li>By definition of inverse, A⁻¹ = A + 2I:
+        <span class="math">A · (A + 2I) = I  →  A⁻¹ = A + 2I</span>
+      </li>
+    </ul>
+    <span class="answer">A⁻¹ = A + 2I</span>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">5</span> |A|=2, |B|=3 (both 3×3) — compute determinant expressions</div>
+  <div class="problem-body">
+    <div class="note">Key rules for n=3: |kA|=k³|A|; |A⁻¹|=1/|A|; |Aᵐ|=|A|ᵐ; |Aᵗ|=|A|</div>
+    <div class="part">
+      <div class="part-label">a) |A⁻¹|</div>
+      <span class="math">|A⁻¹| = 1/|A| = 1/2</span>
+      <span class="answer">1/2</span>
+    </div>
+    <div class="part">
+      <div class="part-label">b) |5B⁻¹|</div>
+      <span class="math">|5B⁻¹| = 5³·|B⁻¹| = 125·(1/3) = 125/3</span>
+      <span class="answer">125/3</span>
+    </div>
+    <div class="part">
+      <div class="part-label">c) |(AB)⁻¹|</div>
+      <span class="math">|(AB)⁻¹| = 1/|AB| = 1/(|A|·|B|) = 1/(2·3) = 1/6</span>
+      <span class="answer">1/6</span>
+    </div>
+    <div class="part">
+      <div class="part-label">d) |−3A³B⁻¹|</div>
+      <span class="math">= (−3)³·|A³|·|B⁻¹|
+= −27 · |A|³ · (1/|B|)
+= −27 · 8 · (1/3)
+= −27 · 8/3 = −72</span>
+      <span class="answer">−72</span>
+    </div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">6</span> Prove A is orthogonal and find A⁻¹</div>
+  <div class="problem-body">
+    <span class="math">A = ⎡ 1/2    √3/2   0⎤
+    ⎢−√3/2   1/2   0⎥
+    ⎣  0      0    1⎦</span>
+    <div class="note">A matrix is orthogonal iff AAᵗ = I, and then A⁻¹ = Aᵗ.</div>
+    <ul class="steps">
+      <li>Write Aᵗ:
+        <span class="math">Aᵗ = ⎡ 1/2   −√3/2   0⎤
+     ⎢ √3/2   1/2   0⎥
+     ⎣  0      0    1⎦</span>
+      </li>
+      <li>Compute AAᵗ (the rows of A dotted with the cols of Aᵗ, which are the rows of A):
+        <span class="math">Row1·Col1: (1/2)² + (√3/2)² + 0  = 1/4 + 3/4 = 1  ✓
+Row1·Col2: (1/2)(−√3/2) + (√3/2)(1/2) + 0  = −√3/4 + √3/4 = 0  ✓
+Row1·Col3: 0  ✓
+Row2·Col1: (−√3/2)(1/2) + (1/2)(√3/2) + 0  = 0  ✓
+Row2·Col2: (−√3/2)² + (1/2)² + 0  = 3/4 + 1/4 = 1  ✓
+Row2·Col3: 0  ✓
+Row3·Col3: 0² + 0² + 1² = 1  ✓</span>
+      </li>
+      <li>Therefore AAᵗ = I → A is <strong>orthogonal</strong>.</li>
+    </ul>
+    <span class="answer">A is orthogonal;  A⁻¹ = Aᵗ = ⎡ 1/2   −√3/2   0⎤
+                                          ⎢ √3/2   1/2    0⎥
+                                          ⎣  0      0     1⎦</span>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">7</span> A = (1/√2)[[1],[−1]] — prove B = I − 2AAᵗ is orthogonal</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Compute AAᵗ (column vector × row vector):
+        <span class="math">AAᵗ = (1/√2)⎡1⎤·(1/√2)[1  −1] = (1/2)⎡ 1  −1⎤
+           ⎣−1⎦                       ⎣−1   1⎦</span>
+      </li>
+      <li>Compute 2AAᵗ and then B:
+        <span class="math">2AAᵗ = ⎡ 1  −1⎤
+       ⎣−1   1⎦
+
+B = I − 2AAᵗ = ⎡1  0⎤ − ⎡ 1  −1⎤ = ⎡0  1⎤
+               ⎣0  1⎦   ⎣−1   1⎦   ⎣1  0⎦</span>
+      </li>
+      <li>Check BBᵗ:  Bᵗ = B (B is symmetric), so BBᵗ = B²:
+        <span class="math">B² = ⎡0  1⎤·⎡0  1⎤ = ⎡1  0⎤ = I  ✓
+     ⎣1  0⎦ ⎣1  0⎦   ⎣0  1⎦</span>
+      </li>
+    </ul>
+    <span class="answer">BBᵗ = I → B is orthogonal. (B is a reflection matrix.)</span>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="problem">
+  <div class="problem-header"><span class="num">8</span> Prove: the determinant of any orthogonal matrix equals ±1</div>
+  <div class="problem-body">
+    <ul class="steps">
+      <li>Let A be orthogonal, so by definition: AAᵗ = I</li>
+      <li>Take the determinant of both sides:
+        <span class="math">|AAᵗ| = |I| = 1</span>
+      </li>
+      <li>Use the multiplicative property of determinants and |Aᵗ| = |A|:
+        <span class="math">|A|·|Aᵗ| = 1  →  |A|·|A| = 1  →  |A|² = 1</span>
+      </li>
+      <li>Therefore:
+        <span class="math">|A| = ±1  □</span>
+      </li>
+    </ul>
+    <div class="note">+1 corresponds to a rotation; −1 corresponds to an improper rotation (rotation + reflection).</div>
+  </div>
+</div>
+
+</main>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = ['sheet1','sheet2','sheet3'];
+  const links = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = 'sheet1';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 120) current = id;
+    });
+    links.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
